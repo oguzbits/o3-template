@@ -1,0 +1,27 @@
+# Local services for development and tests (`pnpm db:up`, stop with `pnpm db:down`).
+# Data lives in memory and is gone after `pnpm db:down`. The credentials are for these throwaway
+# containers only.
+services:
+  db:
+    image: pgvector/pgvector:0.8.7-pg18
+    environment:
+      POSTGRES_USER: o3
+      POSTGRES_PASSWORD: o3
+      POSTGRES_DB: o3_test
+    ports:
+      - '54329:5432'
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U o3 -d o3_test']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  # Local AWS emulator (Floci, MIT, no account). The AWS SDK only needs the endpoint
+  # http://localhost:4566 and any test credentials. It is an emulator, not AWS: check critical
+  # behaviour against a real sandbox. TODO: the tag is not pinned yet; look at the tags once, then pin it.
+  floci:
+    image: floci/floci:latest
+    ports:
+      - '4566:4566'

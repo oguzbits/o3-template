@@ -1,0 +1,5 @@
+{
+  "apps/api/src/config/env.ts": "docs/PLAN.md",
+  "packages/shared/src/": "docs/PLAN.md",
+  "docker-compose.yml": "docs/PLAN.md"
+}
