@@ -8,7 +8,7 @@ Offene Arbeit am Template, grob in der Reihenfolge, in der ich sie angehen würd
 
 ## Backend-Bausteine
 
-- [ ] Postgres-Adapter für `ItemRepository` mit Drizzle und generierten Migrationen; `db`-Testprojekt in Vitest, das den Contract-Test gegen echtes Postgres ausführt.
+- [ ] Postgres-Adapter mit Drizzle und generierten Migrationen als Baustein (Vorlage: Branch `feat/postgres-adapter`), erst wenn ein Projekt ihn braucht.
 - [ ] Job-Queue (pg-boss): Retries mit Backoff, Dead-Letter, idempotente Jobs, Test mit abgebrochenem Worker.
 - [ ] Verteilter Rate Limiter (Token Bucket und Sliding Window), getestet mit mehreren Instanzen.
 - [ ] Floci-Adapter für Objektspeicher (S3), Endpoint nur über `env.ts`.
@@ -26,4 +26,4 @@ Offene Arbeit am Template, grob in der Reihenfolge, in der ich sie angehen würd
 
 - [ ] Web-Preset (Vite, React, TanStack Query, shadcn) mit den UI-Regeln.
 - [ ] NestJS statt Hono als API-Preset.
-- [ ] DynamoDB statt Postgres als Datenbank-Preset (über Floci testbar).
+- [ ] DynamoDB statt Postgres als Datenbank-Preset (über Floci testbar, dann mit gepinntem Image-Tag).

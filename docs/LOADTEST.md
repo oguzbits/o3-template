@@ -38,7 +38,7 @@ erwarten.
 Eine Last ohne Ausfall zeigt nur den Gutfall. Währenddessen mindestens einen Ausfall auslösen und
 notieren, was passiert:
 
-- Datenbank oder Cache stoppen (`docker compose stop db`) und wieder starten.
+- Datenbank oder Cache des Projekts stoppen und wieder starten.
 - Einen Worker mitten im Job beenden.
 - Dieselbe Anfrage doppelt schicken (Idempotenz).
 

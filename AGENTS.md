@@ -31,7 +31,7 @@ Project context and the reasons for the stack: [docs/PLAN.md](docs/PLAN.md). Use
 1. **Contract first.** Every request and response shape is a Zod schema in `packages/shared`. Routes
    validate input with it; tests parse output with it.
 2. **Ports and adapters.** Every adapter passes the contract test of its port. A new adapter is done
-   when `itemRepositoryContract` (or the contract of its own port) passes against it.
+   when the contract test of its port (a shared test function that the adapter tests register) passes against it.
 3. **Env only through `apps/api/src/config/env.ts`.** Only `parseEnv` turns `process.env` into
    config. Entry points hand the environment to it; nothing else reads it. Never print or edit `.env*`
    files and never commit them; only `.env.example` is tracked.

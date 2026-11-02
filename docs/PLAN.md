@@ -18,7 +18,6 @@ sich pro Projekt unterscheidet (Datenbank, Framework, Queue), liegt hinter Ports
 | Verträge      | Zod                                              | Eine Quelle für Validierung und Typen                                              |
 | Tests         | Vitest, MSW                                      | MSW verhindert echte Netzwerkaufrufe in Tests                                      |
 | Architektur   | dependency-cruiser, knip, jscpd, Magic-String-Audit | Regeln werden geprüft, nicht nur beschrieben                                     |
-| Lokale Cloud  | Floci (AWS-Emulator), Postgres                   | Kein Konto und keine Kosten; Floci ist kein vollständiger Ersatz für echtes AWS    |
 | Lasttests     | k6                                               | Skripte in `load/`, Zahlen in [LOADTEST.md](LOADTEST.md)                           |
 
 ## Grenzen des Kerns
@@ -27,3 +26,7 @@ sich pro Projekt unterscheidet (Datenbank, Framework, Queue), liegt hinter Ports
 - Austauschbar sind API-Framework, Datenbank und Queue. Austausch heißt: neuer Adapter, der den
   Contract-Test seines Ports besteht.
 - Neue Varianten entstehen erst, wenn ein echtes Projekt sie braucht (Rule of Three).
+- Bewusst nicht im Kern: Datenbank, Beispiel-Feature und lokale Dienste (docker-compose). Ein neues
+  Projekt kann SQL oder NoSQL wählen; der Port und sein Contract-Test entstehen mit dem ersten
+  Adapter. Ein fertiger Postgres-Adapter mit Drizzle liegt als Referenz im Branch
+  `feat/postgres-adapter`.

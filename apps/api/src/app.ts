@@ -6,7 +6,6 @@ import type { AppEnv } from './app-env';
 import { errorBody } from './error-mapping';
 import { HTTP_STATUS } from './http-status';
 import { requestContext } from './middleware/request-context';
-import { itemsRoutes } from './routes/items';
 
 export function createApp(deps: AppDeps): Hono<AppEnv> {
   const app = new Hono<AppEnv>();
@@ -14,7 +13,6 @@ export function createApp(deps: AppDeps): Hono<AppEnv> {
   app.use('*', requestContext(deps.log));
 
   app.get('/health', (c) => c.json(HealthSchema.parse({ status: 'ok' })));
-  app.route('/api/items', itemsRoutes(deps));
 
   app.notFound((c) =>
     c.json(errorBody(API_ERROR.NOT_FOUND, c.get('requestId')), HTTP_STATUS.NOT_FOUND)

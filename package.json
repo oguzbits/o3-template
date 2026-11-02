@@ -24,8 +24,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "prepare": "husky",
-    "db:up": "docker compose up -d --wait",
-    "db:down": "docker compose down",
     "load": "docker run --rm -i -e BASE_URL -e RATE -e DURATION --add-host=host.docker.internal:host-gateway grafana/k6:2.3.0 run - < load/smoke.js"
   },
   "devDependencies": {

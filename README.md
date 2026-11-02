@@ -1,12 +1,12 @@
 # o3-template
 
 Template für Backend-Projekte: ein kleiner, anbieterneutraler Kern mit strengen, automatisch
-geprüften Regeln, Regeln für Coding-Agenten, lokalem Postgres und AWS-Emulator (Floci) und einem
-Lasttest-Gerüst. Jedes neue Projekt startet damit auf demselben Qualitätsniveau.
+geprüften Regeln, Regeln für Coding-Agenten und einem Lasttest-Gerüst. Es bringt bewusst keine
+Datenbank und kein Beispiel-Feature mit. Jedes neue Projekt startet auf demselben Qualitätsniveau.
 
 ## Schnellstart
 
-Voraussetzungen: Node 24 (siehe `.nvmrc`), pnpm, Docker.
+Voraussetzungen: Node 24 (siehe `.nvmrc`), pnpm; Docker nur für den Lasttest.
 
 ```bash
 pnpm install
@@ -14,7 +14,6 @@ cp .env.example .env.local
 pnpm dev            # API auf http://localhost:3000
 pnpm check          # Typen, Lint, Architektur, toter Code, Duplikate, Audits
 pnpm test
-pnpm db:up          # Postgres und Floci lokal starten
 pnpm load           # Lasttest mit k6 (Docker), die API muss laufen
 ```
 
@@ -23,15 +22,13 @@ pnpm load           # Lasttest mit k6 (Docker), die API muss laufen
 | Pfad                           | Inhalt                                                                 |
 | ------------------------------ | ---------------------------------------------------------------------- |
 | `packages/shared`              | Zod-Verträge, abgeleitete Typen, Konstanten. Keine Logik.              |
-| `apps/api/src/core`            | Reine Fachlogik und die Ports (Interfaces) für alles Äußere.           |
-| `apps/api/src/adapters`        | Umsetzungen der Ports. Heute nur Speicher, später Postgres, Queue, S3. |
-| `apps/api/src/routes`          | Dünne HTTP-Schicht: Eingabe prüfen, Kern aufrufen, Antwort formen.     |
+| `apps/api`                     | Hono-API mit `/health`, Request-ID, Logger, Env-Parsing, Shutdown.     |
 | `load/`                        | k6-Szenarien. Zahlen kommen nach [docs/LOADTEST.md](docs/LOADTEST.md). |
 | `scripts/audit`                | Prüfungen für Magic Strings und Dokumentation.                         |
 | `.claude`, `.husky`, `.github` | Hooks für Coding-Agenten, Git-Hooks und CI.                            |
 
-Das Beispiel-Feature (`items`) zeigt das Muster einmal vollständig: Vertrag, reine Logik, Port,
-Adapter mit Contract-Test, Route mit Test.
+Die Schichten (`core`, `adapters`, `routes` unter `apps/api/src`) legt ein Projekt an, sobald es sie
+braucht. Ihre Regeln stehen in [AGENTS.md](AGENTS.md) und werden von `pnpm depcruise` geprüft.
 
 ## Was geprüft wird
 
