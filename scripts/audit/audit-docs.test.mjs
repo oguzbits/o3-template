@@ -54,32 +54,32 @@ describe('auditDocs', () => {
   });
 
   it('reports a pnpm command that no package.json defines', () => {
-    expect(audit('Run `pnpm gibt-es-nicht`.\n')).toEqual([
-      expect.stringContaining('gibt-es-nicht'),
+    expect(audit('Run `pnpm does-not-exist`.\n')).toEqual([
+      expect.stringContaining('does-not-exist'),
     ]);
   });
 
   it('reads the script name after pnpm flags and accepts built-in commands', () => {
-    const doc = '`pnpm --filter @nlm/api db:up` und `pnpm install`\n';
+    const doc = '`pnpm --filter @nlm/api db:up` and `pnpm install`\n';
     expect(audit(doc)).toEqual([]);
   });
 
   it('reports a path under apps, packages or deploy that does not exist', () => {
-    const doc = '`apps/api/src/weg.ts` und `apps/api/src/index.ts:12`\n';
-    expect(audit(doc)).toEqual([expect.stringContaining('apps/api/src/weg.ts')]);
+    const doc = '`apps/api/src/gone.ts` and `apps/api/src/index.ts:12`\n';
+    expect(audit(doc)).toEqual([expect.stringContaining('apps/api/src/gone.ts')]);
   });
 
   it('reports an absolute machine path', () => {
-    expect(audit('Liegt in /Users/jemand/Dev/x.\n')).toEqual([expect.stringContaining('/Users/')]);
+    expect(audit('Lives in /Users/someone/Dev/x.\n')).toEqual([expect.stringContaining('/Users/')]);
   });
 
   it('reports a test count but not the word tests alone', () => {
-    expect(audit('Alle 1179 Tests grün.\n')).toEqual([expect.stringContaining('1179 Tests')]);
-    expect(audit('Tests laufen offline.\n')).toEqual([]);
+    expect(audit('All 1179 tests pass.\n')).toEqual([expect.stringContaining('1179 tests')]);
+    expect(audit('Tests run offline.\n')).toEqual([]);
   });
 
   it('skips fenced code blocks for commands and counts but not for absolute paths', () => {
-    const doc = '```\npnpm gibt-es-nicht\n12 Tests\n/Users/jemand/x\n```\n';
+    const doc = '```\npnpm does-not-exist\n12 tests\n/Users/someone/x\n```\n';
     expect(audit(doc)).toEqual([expect.stringContaining('/Users/')]);
   });
 

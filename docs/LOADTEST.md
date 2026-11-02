@@ -1,37 +1,36 @@
-# Lasttests
+# Load tests
 
-Zahlen gehören in dieses Dokument, gemessen und nicht geschätzt. Jede Zeile nennt Szenario, Last,
-Ergebnis, Maschine und den Commit, mit dem gemessen wurde.
+Numbers belong in this document, measured and not estimated. Every row names the scenario, the load,
+the result, the machine and the commit it was measured at.
 
-## Ausführen
+## Running
 
-1. API starten: `pnpm dev` (oder den gebauten Stand mit `pnpm build` und danach `pnpm --filter @o3/api start`).
-2. In einem zweiten Terminal: `pnpm load`. Docker muss laufen; k6 kommt als Container.
-3. Last und Dauer anpassen: `RATE=2000 DURATION=60s pnpm load`. Die Ziel-URL steht in `BASE_URL`
-   (Standard: `http://host.docker.internal:3000`).
+1. Start the API: `pnpm dev` (or the built version with `pnpm build`, then `pnpm --filter @o3/api start`).
+2. In a second terminal: `pnpm load`. Docker must be running; k6 comes as a container.
+3. Adjust load and duration: `RATE=2000 DURATION=60s pnpm load`. The target URL is `BASE_URL`
+   (default: `http://host.docker.internal:3000`).
 
-Das Szenario `load/smoke.js` hält eine konstante Anfragerate auf `/health` und bricht ab, wenn mehr als
-1 % der Anfragen fehlschlagen oder das 95. Perzentil der Antwortzeit über 200 ms liegt. Es ist die
-Vorlage für eigene Szenarien (Kauf-Endpunkt, Queue, Rate Limiter).
+The scenario `load/smoke.js` holds a constant request rate on `/health` and aborts if more than 1 % of
+the requests fail or the 95th percentile of the response time is above 200 ms. It is the template for
+your own scenarios (purchase endpoint, queue, rate limiter).
 
-## Ergebnisse
+## Results
 
-Das Template liefert keine Zahlen mit: Sie hingen an einer Maschine und an einem Dienst, den ein neues
-Projekt nicht hat. Jedes Projekt trägt hier seine eigenen Messungen ein, mit der Maschine
-(Prozessor, Kerne, Arbeitsspeicher, Betriebssystem, Node-Version), auf der gemessen wurde, und dem
-Commit. `GET /health` taugt nur als Probe, dass das Gerüst läuft; ein Kapazitätsnachweis ist es nicht,
-weil es weder Datenbank noch Queue berührt.
+The template ships no numbers: they would depend on a machine and on a service that a new project does
+not have. Every project records its own measurements here, with the machine (processor, cores, memory,
+operating system, Node version) it was measured on, and the commit. `GET /health` is only a probe that
+the scaffold runs; it is not capacity evidence, because it touches neither a database nor a queue.
 
-| Szenario | Last (req/s) | erreicht (req/s) | verworfen | p95 (ms) | Fehlerrate | Maschine | Commit |
-| -------- | ------------ | ---------------- | --------- | -------- | ---------- | -------- | ------ |
+| Scenario | Load (req/s) | achieved (req/s) | dropped | p95 (ms) | Error rate | Machine | Commit |
+| -------- | ------------ | ---------------- | ------- | -------- | ---------- | ------- | ------ |
 
-## Ausfälle provozieren
+## Provoking failures
 
-Eine Last ohne Ausfall zeigt nur den Gutfall. Währenddessen mindestens einen Ausfall auslösen und
-notieren, was passiert:
+A load without a failure shows only the good case. Trigger at least one failure during the run and
+note what happens:
 
-- Datenbank oder Cache des Projekts stoppen und wieder starten.
-- Einen Worker mitten im Job beenden.
-- Dieselbe Anfrage doppelt schicken (Idempotenz).
+- Stop the project's database or cache and start it again.
+- Kill a worker in the middle of a job.
+- Send the same request twice (idempotency).
 
-Pro Ausfall in die README des Projekts: Was ist kaputtgegangen, warum, und was wurde geändert.
+For every failure, write into the project's README: what broke, why, and what was changed.

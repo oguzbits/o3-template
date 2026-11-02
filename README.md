@@ -1,57 +1,57 @@
 # o3-template
 
-Template für Backend-Projekte: ein kleiner, anbieterneutraler Kern mit strengen, automatisch
-geprüften Regeln, Regeln für Coding-Agenten und einem Lasttest-Gerüst. Es bringt bewusst keine
-Datenbank und kein Beispiel-Feature mit. Jedes neue Projekt startet auf demselben Qualitätsniveau.
+Template for backend projects: a small, vendor-neutral core with strict, automatically checked rules,
+rules for coding agents and a load-test scaffold. It deliberately ships no database and no example
+feature. Every new project starts at the same quality level.
 
-## Schnellstart
+## Quick start
 
-Voraussetzungen: Node 26 (siehe `.nvmrc`), pnpm; Docker nur für den Lasttest.
+Requirements: Node 26 (see `.nvmrc`), pnpm; Docker only for the load test.
 
 ```bash
 pnpm install
 cp .env.example .env.local
-pnpm dev            # API auf http://localhost:3000
-pnpm check          # Typen, Lint, Architektur, toter Code, Duplikate, Audits
+pnpm dev            # API on http://localhost:3000
+pnpm check          # types, lint, architecture, dead code, duplicates, audits
 pnpm test
-pnpm load           # Lasttest mit k6 (Docker), die API muss laufen
+pnpm load           # load test with k6 (Docker), the API must be running
 ```
 
-## Struktur
+## Structure
 
-| Pfad                           | Inhalt                                                                 |
-| ------------------------------ | ---------------------------------------------------------------------- |
-| `packages/shared`              | Zod-Verträge, abgeleitete Typen, Konstanten. Keine Logik.              |
-| `apps/api`                     | Hono-API mit `/health`, Request-ID, Logger, Env-Parsing, Shutdown.     |
-| `load/`                        | k6-Szenarien. Zahlen kommen nach [docs/LOADTEST.md](docs/LOADTEST.md). |
-| `scripts/audit`                | Prüfungen für Magic Strings und Dokumentation.                         |
-| `.claude`, `.husky`, `.github` | Hooks für Coding-Agenten, Git-Hooks und CI.                            |
+| Path                           | Content                                                             |
+| ------------------------------ | ------------------------------------------------------------------- |
+| `packages/shared`              | Zod contracts, inferred types, constants. No logic.                 |
+| `apps/api`                     | Hono API with `/health`, request ID, logger, env parsing, shutdown. |
+| `load/`                        | k6 scenarios. Numbers go to [docs/LOADTEST.md](docs/LOADTEST.md).   |
+| `scripts/audit`                | Checks for magic strings and documentation.                         |
+| `.claude`, `.husky`, `.github` | Hooks for coding agents, Git hooks and CI.                          |
 
-Die Schichten (`core`, `adapters`, `routes` unter `apps/api/src`) legt ein Projekt an, sobald es sie
-braucht. Ihre Regeln stehen in [AGENTS.md](AGENTS.md) und werden von `pnpm depcruise` geprüft.
+A project creates the layers (`core`, `adapters`, `routes` under `apps/api/src`) when it needs them.
+Their rules are in [AGENTS.md](AGENTS.md) and are enforced by `pnpm depcruise`.
 
-## Was geprüft wird
+## What is checked
 
-| Prüfung       | Befehl                   | Zweck                                                     |
-| ------------- | ------------------------ | --------------------------------------------------------- |
-| Typen         | `pnpm typecheck`         | TypeScript strict                                         |
-| Lint          | `pnpm lint`              | ESLint mit Regeln gegen `any`, stille Fehler, Roh-Strings |
-| Architektur   | `pnpm depcruise`         | Schichten und Importrichtungen                            |
-| Toter Code    | `pnpm knip`              | Ungenutzte Dateien und Abhängigkeiten                     |
-| Duplikate     | `pnpm audit:duplication` | Schwelle 2 %                                              |
-| Magic Strings | `pnpm audit:magic`       | Konstanten aus `as const`-Wörterbüchern statt Roh-Strings |
-| Dokumentation | `pnpm audit:docs`        | Links, Skriptnamen und Pfade in Markdown                  |
+| Check         | Command                  | Purpose                                                       |
+| ------------- | ------------------------ | ------------------------------------------------------------- |
+| Types         | `pnpm typecheck`         | TypeScript strict                                             |
+| Lint          | `pnpm lint`              | ESLint with rules against `any`, silent errors, raw strings   |
+| Architecture  | `pnpm depcruise`         | Layers and import directions                                  |
+| Dead code     | `pnpm knip`              | Unused files and dependencies                                 |
+| Duplicates    | `pnpm audit:duplication` | Threshold 2 %                                                 |
+| Magic strings | `pnpm audit:magic`       | Constants from `as const` dictionaries instead of raw strings |
+| Documentation | `pnpm audit:docs`        | Links, script names and paths in Markdown                     |
 
-`pnpm check` führt alles aus. Husky ruft es vor jedem Commit auf, die Tests vor jedem Push. In der
-CI laufen zusätzlich Semgrep, Trivy mit SBOM und `pnpm audit`.
+`pnpm check` runs everything. Husky runs it before every commit and the tests before every push. CI
+adds Semgrep, Trivy with SBOM and `pnpm audit`.
 
-## Mit Coding-Agenten arbeiten
+## Working with coding agents
 
-Die Regeln stehen in [AGENTS.md](AGENTS.md); `CLAUDE.md` verweist nur darauf. Die Hooks in `.claude`
-blockieren Force-Pushes, `--no-verify` und den Zugriff auf `.env`-Dateien. Der Stop-Hook lässt einen
-Agenten erst fertig werden, wenn `pnpm check` besteht.
+The rules are in [AGENTS.md](AGENTS.md); `CLAUDE.md` only points to it. The hooks in `.claude` block
+force-pushes, `--no-verify` and access to `.env` files. The Stop hook lets an agent finish only when
+`pnpm check` passes.
 
-## Pflege
+## Maintenance
 
-Offene Arbeit, geplante Bausteine und mögliche Presets (Web, NestJS, DynamoDB) stehen in
-[docs/BACKLOG.md](docs/BACKLOG.md). Die Entscheidungen und ihre Gründe stehen in [docs/PLAN.md](docs/PLAN.md).
+Open work, planned building blocks and possible presets (Web, NestJS, DynamoDB) are in
+[docs/BACKLOG.md](docs/BACKLOG.md). The decisions and their reasons are in [docs/PLAN.md](docs/PLAN.md).

@@ -1,25 +1,25 @@
 # Backlog
 
-Offene Arbeit am Template, grob in der Reihenfolge, in der ich sie angehen würde.
+Open work on the template, roughly in the order I would tackle it.
 
-## Backend-Bausteine
+## Backend building blocks
 
-- [ ] Postgres-Adapter mit Drizzle und generierten Migrationen als Baustein (Vorlage: der geschlossene Pull Request #2 mit Adapter, Migrationen, `db`-Testprojekt und CI-Job), erst wenn ein Projekt ihn braucht.
-- [ ] Job-Queue (pg-boss): Retries mit Backoff, Dead-Letter, idempotente Jobs, Test mit abgebrochenem Worker.
-- [ ] Verteilter Rate Limiter (Token Bucket und Sliding Window), getestet mit mehreren Instanzen.
-- [ ] Floci-Adapter für Objektspeicher (S3), Endpoint nur über `env.ts`.
-- [ ] Migrationsregel Expand, Backfill, Contract als Beispiel mit Lasttest.
+- [ ] Postgres adapter with Drizzle and generated migrations as a building block (reference: the closed pull request #2 with adapter, migrations, `db` test project and CI job), only when a project needs it.
+- [ ] Job queue (pg-boss): retries with backoff, dead letter, idempotent jobs, test with a killed worker.
+- [ ] Distributed rate limiter (token bucket and sliding window), tested with several instances.
+- [ ] Floci adapter for object storage (S3), endpoint only through `env.ts`.
+- [ ] Migration rule expand, backfill, contract as an example with a load test.
 
-## Qualität und Betrieb
+## Quality and operations
 
-- [ ] Nächtlicher CI-Lauf: API starten, `load/`-Szenarien ausführen, Ergebnis als Artefakt ablegen.
-- [ ] Ausfall-Skript: Cache oder Worker während des Lasttests beenden.
-- [ ] Dockerfile und Deploy-Gerüst.
-- [ ] Mutation-Tests (Stryker) als optionaler Baustein, erst wenn ein Projekt Fachlogik in `core` hat: nur `core` mutieren, nachts in der CI mit inkrementellem Modus und Mindestquote, nicht in `pnpm check` und nicht in der PR-CI. Vorher prüfen, ob der Vitest-Runner mit der eingesetzten Vitest-Version läuft.
-- [ ] Wöchentlicher Canary: aus dem Template ein Testprojekt erzeugen und dort `pnpm check` laufen lassen.
+- [ ] Nightly CI run: start the API, run the `load/` scenarios, store the result as an artifact.
+- [ ] Failure script: stop a cache or worker during the load test.
+- [ ] Dockerfile and deploy scaffold.
+- [ ] Mutation tests (Stryker) as an optional building block, only once a project has domain logic in `core`: mutate only `core`, run nightly in CI with incremental mode and a minimum score, not in `pnpm check` and not in PR CI. First check that the Vitest runner works with the Vitest version in use.
+- [ ] Weekly canary: generate a test project from the template and run `pnpm check` there.
 
-## Presets (erst bei echtem Bedarf)
+## Presets (only on real demand)
 
-- [ ] Web-Preset (Vite, React, TanStack Query, shadcn) mit den UI-Regeln.
-- [ ] NestJS statt Hono als API-Preset.
-- [ ] DynamoDB statt Postgres als Datenbank-Preset (über Floci testbar, dann mit gepinntem Image-Tag).
+- [ ] Web preset (Vite, React, TanStack Query, shadcn) with the UI rules.
+- [ ] NestJS instead of Hono as an API preset.
+- [ ] DynamoDB instead of Postgres as a database preset (testable through Floci, then with a pinned image tag).

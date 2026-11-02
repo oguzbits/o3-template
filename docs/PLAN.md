@@ -1,31 +1,31 @@
-# Plan und Entscheidungen
+# Plan and decisions
 
-Kontext, kein Status. Was offen ist, steht in [BACKLOG.md](BACKLOG.md); den Rest zeigt git.
+Context, not status. What is open is in [BACKLOG.md](BACKLOG.md); git shows the rest.
 
-## Ziel
+## Goal
 
-Ein Template für Backend-Projekte, das jedes neue Repo mit denselben Qualitätsschranken, Regeln für
-Coding-Agenten und Lasttest-Gerüst startet. Der Kern ist klein und kennt keinen Anbieter. Alles, was
-sich pro Projekt unterscheidet (Datenbank, Framework, Queue), liegt hinter Ports und Adaptern.
+A template for backend projects that starts every new repo with the same quality gates, rules for
+coding agents and load-test scaffold. The core is small and knows no vendor. Everything that differs
+per project (database, framework, queue) sits behind ports and adapters.
 
-## Entscheidungen
+## Decisions
 
-| Bereich       | Wahl                                             | Grund                                                                              |
-| ------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| Sprache       | TypeScript strict                                | Ein Typsystem für Verträge, API und Clients                                        |
-| Monorepo      | pnpm Workspaces                                  | Verträge liegen in `packages/shared` und werden von allen Apps genutzt             |
-| API           | Hono                                             | Klein, schnell, typisierte Routen; ein Austausch betrifft nur die Routen           |
-| Verträge      | Zod                                              | Eine Quelle für Validierung und Typen                                              |
-| Tests         | Vitest, MSW                                      | MSW verhindert echte Netzwerkaufrufe in Tests                                      |
-| Architektur   | dependency-cruiser, knip, jscpd, Magic-String-Audit | Regeln werden geprüft, nicht nur beschrieben                                     |
-| Lasttests     | k6                                               | Skripte in `load/`, Zahlen in [LOADTEST.md](LOADTEST.md)                           |
+| Area         | Choice                                              | Reason                                                                  |
+| ------------ | --------------------------------------------------- | ----------------------------------------------------------------------- |
+| Language     | TypeScript strict                                   | One type system for contracts, API and clients                          |
+| Monorepo     | pnpm workspaces                                     | Contracts live in `packages/shared` and are used by all apps            |
+| API          | Hono                                                | Small, fast, typed routes; replacing it only affects the routes         |
+| Contracts    | Zod                                                 | One source for validation and types                                     |
+| Tests        | Vitest, MSW                                         | MSW prevents real network calls in tests                                |
+| Architecture | dependency-cruiser, knip, jscpd, magic-string audit | Rules are checked, not just described                                   |
+| Load tests   | k6                                                  | Scripts in `load/`, numbers in [LOADTEST.md](LOADTEST.md)               |
 
-## Grenzen des Kerns
+## Limits of the core
 
-- Das Frontend ist ein optionales Preset, kein Teil des Kerns.
-- Austauschbar sind API-Framework, Datenbank und Queue. Austausch heißt: neuer Adapter, der den
-  Contract-Test seines Ports besteht.
-- Neue Varianten entstehen erst, wenn ein echtes Projekt sie braucht (Rule of Three).
-- Bewusst nicht im Kern: Datenbank, Beispiel-Feature und lokale Dienste (docker-compose). Ein neues
-  Projekt kann SQL oder NoSQL wählen; der Port und sein Contract-Test entstehen mit dem ersten
-  Adapter. Ein fertiger Postgres-Adapter mit Drizzle liegt als Referenz im geschlossenen Pull Request #2.
+- The frontend is an optional preset, not part of the core.
+- Replaceable are the API framework, the database and the queue. Replacing means: a new adapter that
+  passes the contract test of its port.
+- New variants appear only when a real project needs them (Rule of Three).
+- Deliberately not in the core: a database, an example feature and local services (docker-compose). A
+  new project can choose SQL or NoSQL; the port and its contract test appear with the first adapter. A
+  complete Postgres adapter with Drizzle exists as a reference in the closed pull request #2.
