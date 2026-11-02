@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-// Port 9 (discard) on localhost: without the guard this fails with a connection error, with the guard
+// Closed high port on localhost: without the guard this fails with a connection error, with the guard
 // MSW rejects the request first. The message tells the two apart.
-const UNMOCKED_URL = 'http://127.0.0.1:9/unmocked';
+const UNMOCKED_URL = 'http://127.0.0.1:59999/unmocked';
 
 describe('network guard (vitest.setup.ts)', () => {
   it('rejects a request that no handler covers', async () => {
@@ -11,6 +11,6 @@ describe('network guard (vitest.setup.ts)', () => {
       (error: Error) => `${error.message} ${String(error.cause ?? '')}`
     );
 
-    expect(outcome).toMatch(/MSW|onUnhandled/i);
+    expect(outcome).toMatch(/\[MSW\]/);
   });
 });
