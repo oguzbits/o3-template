@@ -1,7 +1,7 @@
 import type { Logger } from './logger';
 
 interface Closable {
-  close(callback: (error?: Error) => void): unknown;
+  close(callback: (error?: Error) => void): void;
 }
 
 const SIGNALS = ['SIGTERM', 'SIGINT'] as const;

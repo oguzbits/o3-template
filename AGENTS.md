@@ -21,7 +21,9 @@ Project context and the reasons for the stack: [docs/PLAN.md](docs/PLAN.md). Use
 - Fail fast: adapter and provider errors throw. No silent `catch`, no fallback data in production paths.
 - Filtering, search and aggregation run in the database, never by loading whole tables into Node.
 - Strict types: no `any`, no `@ts-ignore`, no `as unknown as`, no `export *`, no `unknown` as a
-  parameter type (parse at the boundary with Zod; `cause` and type-predicate subjects are exempt).
+  parameter type (parse at the boundary with Zod; `cause` and type-predicate subjects are exempt), no
+  `unknown` return type, no dictionary of `unknown`, `any` or `object` (`Record<string, unknown>` is
+  allowed only as a generic constraint), and no widening a value to `unknown` and asserting it back.
   Every type assertion except `as const` needs a `// SAFETY: <invariant>` comment. Derive types with
   `z.infer`, never write a parallel type by hand.
 - No module mocking in tests (`vi.mock`, `jest.mock`): pass dependencies in or use MSW.

@@ -5,6 +5,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
+import noWidenThenAssert from './scripts/eslint/no-widen-then-assert.mjs';
 import requireSafetyComment from './scripts/eslint/require-safety-comment.mjs';
 
 const MODEL_ID_PATTERN = '^(gemini|gpt|claude)-';
@@ -59,6 +60,32 @@ const sharedRules = [
     message:
       'no-unknown-parameters: a parameter typed `unknown` hides the contract. Take a typed value, or parse the input with a Zod schema at the boundary.',
   },
+  {
+    selector: `${FUNCTION_NODES}[returnType.typeAnnotation.type='TSUnknownKeyword']`,
+    message:
+      'no-unknown-returns: a function returning `unknown` pushes the checking onto every caller. Return a typed value (a Zod-inferred type).',
+  },
+  {
+    selector: `${FUNCTION_NODES}[returnType.typeAnnotation.typeName.name=/^(Promise|PromiseLike)$/][returnType.typeAnnotation.typeArguments.params.0.type='TSUnknownKeyword']`,
+    message:
+      'no-unknown-returns: `Promise<unknown>` pushes the checking onto every caller. Return a typed value (a Zod-inferred type).',
+  },
+  {
+    // Not inside a generic constraint (`T extends Record<string, unknown>` stays allowed).
+    selector: `TSTypeReference[typeName.name='Record'][typeArguments.params.1.type=/^TS(Unknown|Any|Object)Keyword$/]:not(TSTypeParameter > TSTypeReference)`,
+    message:
+      'no-unsafe-dictionary-type: a dictionary of `unknown`, `any` or `object` hides the value contract. Name the value type or use a Zod schema.',
+  },
+  {
+    selector: `TSTypeReference[typeName.name='Record'][typeArguments.params.1.type='TSTypeLiteral'][typeArguments.params.1.members.length=0]:not(TSTypeParameter > TSTypeReference)`,
+    message:
+      'no-unsafe-dictionary-type: a dictionary of `{}` hides the value contract. Name the value type or use a Zod schema.',
+  },
+  {
+    selector: `TSIndexSignature > TSTypeAnnotation > :matches(TSUnknownKeyword, TSAnyKeyword, TSObjectKeyword)`,
+    message:
+      'no-unsafe-dictionary-type: an index signature of `unknown`, `any` or `object` hides the value contract. Name the value type or use a Zod schema.',
+  },
 ];
 
 const modelIdRule = {
@@ -81,7 +108,12 @@ export default defineConfig([
     plugins: {
       'unused-imports': unusedImports,
       'simple-import-sort': simpleImportSort,
-      local: { rules: { 'require-safety-comment': requireSafetyComment } },
+      local: {
+        rules: {
+          'no-widen-then-assert': noWidenThenAssert,
+          'require-safety-comment': requireSafetyComment,
+        },
+      },
     },
     languageOptions: { globals: globals.node },
     rules: {
@@ -91,6 +123,7 @@ export default defineConfig([
         'error',
         { varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
+      'local/no-widen-then-assert': 'error',
       'local/require-safety-comment': 'error',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
