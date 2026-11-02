@@ -50,6 +50,39 @@ jobs:
           require-lockfile: true
       - run: pnpm test
 
+  db:
+    name: Postgres adapter (contract test, migrations)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        # Same image as docker-compose.yml.
+        image: pgvector/pgvector:0.8.7-pg18
+        env:
+          POSTGRES_USER: o3
+          POSTGRES_PASSWORD: o3
+          POSTGRES_DB: o3_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U o3 -d o3_test"
+          --health-interval 2s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgres://o3:o3@localhost:5432/o3_test
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/setup@fbda4c85fc2e1e08721cd8763afea8f48d60f024 # v3.0.0
+        with:
+          cache: true
+          require-lockfile: true
+      - run: pnpm test:db
+      # A schema change without its generated migration leaves a new file here and fails the job.
+      - name: Migrations are up to date
+        run: |
+          pnpm db:generate
+          test -z "$(git status --porcelain apps/api/drizzle)"
+
   build:
     name: Build api
     runs-on: ubuntu-latest
