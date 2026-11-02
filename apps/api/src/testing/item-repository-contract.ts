@@ -5,9 +5,13 @@ import { describe, expect, it } from 'vitest';
 
 import type { ItemRepository } from '../core/item-repository';
 
-function makeItem(title: string, createdAt: string): Item {
-  return { id: randomUUID(), title, createdAt };
+function makeItem(title: string, createdAt: string, id: string = randomUUID()): Item {
+  return { id, title, createdAt };
 }
+
+// Fixed ids so that the id order is known: LOW_ID sorts before HIGH_ID.
+const LOW_ID = '00000000-0000-4000-8000-000000000001';
+const HIGH_ID = 'ffffffff-ffff-4fff-8fff-ffffffffffff';
 
 /**
  * The behaviour every ItemRepository adapter must show. Register it from the adapter's own test:
@@ -35,13 +39,25 @@ export function itemRepositoryContract(
 
     it('lists items oldest first', async () => {
       const repository = await createRepository();
-      const newer = makeItem('newer', '2026-01-02T00:00:00.000Z');
-      const older = makeItem('older', '2026-01-01T00:00:00.000Z');
+      // The older item has the higher id, so sorting by id alone would give the wrong order.
+      const newer = makeItem('newer', '2026-01-02T00:00:00.000Z', LOW_ID);
+      const older = makeItem('older', '2026-01-01T00:00:00.000Z', HIGH_ID);
 
       await repository.create(newer);
       await repository.create(older);
 
       expect(await repository.list()).toEqual([older, newer]);
+    });
+
+    it('orders items created at the same instant by id', async () => {
+      const repository = await createRepository();
+      const high = makeItem('high', '2026-01-01T00:00:00.000Z', HIGH_ID);
+      const low = makeItem('low', '2026-01-01T00:00:00.000Z', LOW_ID);
+
+      await repository.create(high);
+      await repository.create(low);
+
+      expect(await repository.list()).toEqual([low, high]);
     });
 
     it('removes an item and reports whether it existed', async () => {
