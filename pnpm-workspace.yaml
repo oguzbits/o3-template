@@ -4,3 +4,6 @@ packages:
 allowBuilds:
   esbuild: false
   msw: false
+# Strict: fail instead of falling back to a release younger than one day (value in minutes).
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
