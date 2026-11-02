@@ -19,12 +19,14 @@ concurrency:
 # require-lockfile makes the job fail when pnpm-lock.yaml is missing or out of date.
 jobs:
   quality:
+    timeout-minutes: 15
     name: Typecheck, lint, architecture, dead code, duplication
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           cache: true
@@ -40,10 +42,13 @@ jobs:
       - run: pnpm audit --prod --audit-level=high
 
   test:
+    timeout-minutes: 10
     name: Tests (offline, no real API calls)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           cache: true
@@ -51,10 +56,13 @@ jobs:
       - run: pnpm test
 
   build:
+    timeout-minutes: 10
     name: Build api
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
         with:
           cache: true
@@ -62,10 +70,13 @@ jobs:
       - run: pnpm build
 
   trivy:
+    timeout-minutes: 10
     name: Trivy (dependencies, secrets, Dockerfile) and SBOM
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       # Trivy 0.76.0 by digest, run as a container: 0.70 (the version inside trivy-action v0.36.0) did not read
       # the workspace lockfile. Fails on fixable HIGH and CRITICAL findings; the SBOM lists every package.
       - name: Scan
@@ -82,10 +93,13 @@ jobs:
           path: sbom.cdx.json
 
   semgrep:
+    timeout-minutes: 10
     name: Semgrep SAST
     runs-on: ubuntu-latest
     container:
       image: semgrep/semgrep:1.178.0
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - run: semgrep scan --config auto --error apps packages
