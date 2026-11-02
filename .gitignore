@@ -17,7 +17,6 @@ architecture.mmd
 # temporary working notes
 _temp_*.md
 
-!spikes/corpus/README.md
 
 .stryker-tmp/
 stryker.log
