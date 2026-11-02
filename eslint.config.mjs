@@ -5,7 +5,12 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
+import requireSafetyComment from './scripts/eslint/require-safety-comment.mjs';
+
 const MODEL_ID_PATTERN = '^(gemini|gpt|claude)-';
+
+const FUNCTION_NODES =
+  ':matches(FunctionDeclaration, FunctionExpression, ArrowFunctionExpression, TSDeclareFunction, TSFunctionType, TSMethodSignature, TSCallSignatureDeclaration)';
 
 const sharedRules = [
   {
@@ -42,6 +47,18 @@ const sharedRules = [
       "CallExpression[callee.object.name='z'][callee.property.name='literal'] > Literal[value=/^[A-Z][A-Z0-9_]{2,}$/]",
     message: 'Raw enum strings in z.literal() are forbidden. Use the `as const` dictionary.',
   },
+  {
+    selector:
+      'CallExpression[callee.object.name=/^(vi|jest)$/][callee.property.name=/^(mock|doMock|unstable_mockModule)$/]',
+    message:
+      'no-module-mocking: do not replace modules in tests. Pass the dependency in (a port, a fake) or intercept the network with MSW.',
+  },
+  {
+    // `cause` (Error cause) and the subject of a type predicate are the two accepted uses.
+    selector: `${FUNCTION_NODES}[returnType.typeAnnotation.type!='TSTypePredicate'] > Identifier[name!='cause'][typeAnnotation.typeAnnotation.type='TSUnknownKeyword']`,
+    message:
+      'no-unknown-parameters: a parameter typed `unknown` hides the contract. Take a typed value, or parse the input with a Zod schema at the boundary.',
+  },
 ];
 
 const modelIdRule = {
@@ -61,7 +78,11 @@ export default defineConfig([
   js.configs.recommended,
   tseslint.configs.recommended,
   {
-    plugins: { 'unused-imports': unusedImports, 'simple-import-sort': simpleImportSort },
+    plugins: {
+      'unused-imports': unusedImports,
+      'simple-import-sort': simpleImportSort,
+      local: { rules: { 'require-safety-comment': requireSafetyComment } },
+    },
     languageOptions: { globals: globals.node },
     rules: {
       '@typescript-eslint/no-unused-vars': 'off',
@@ -70,6 +91,7 @@ export default defineConfig([
         'error',
         { varsIgnorePattern: '^_', argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
       ],
+      'local/require-safety-comment': 'error',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       'no-empty': ['error', { allowEmptyCatch: false }],
