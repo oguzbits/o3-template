@@ -2,12 +2,9 @@
 
 Offene Arbeit am Template, grob in der Reihenfolge, in der ich sie angehen würde.
 
-## Sofort (blockiert die CI)
+## Sofort
 
-- [ ] `pnpm install` einmal lokal ausführen und `pnpm-lock.yaml` committen. Die CI verlangt die Lockfile.
-- [ ] `pnpm check` und `pnpm test` lokal grün machen und Befunde beheben (der Kern wurde ohne Installation geschrieben).
-- [ ] Lizenz festlegen (steht noch keine im Repo).
-- [ ] Image-Tag von Floci prüfen und in `docker-compose.yml` fest eintragen.
+- [ ] Lizenz festlegen (steht noch keine im Repo; Entscheidung des Eigentümers).
 
 ## Backend-Bausteine
 

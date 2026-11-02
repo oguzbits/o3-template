@@ -4,10 +4,6 @@ Template für Backend-Projekte: ein kleiner, anbieterneutraler Kern mit strengen
 geprüften Regeln, Regeln für Coding-Agenten, lokalem Postgres und AWS-Emulator (Floci) und einem
 Lasttest-Gerüst. Jedes neue Projekt startet damit auf demselben Qualitätsniveau.
 
-> **Stand:** Der Kern wurde ohne Paketinstallation geschrieben und ist noch nie gelaufen. Zuerst
-> `pnpm install` ausführen, die erzeugte `pnpm-lock.yaml` committen und die Befunde von `pnpm check`
-> und `pnpm test` beheben. Die Liste steht in [docs/BACKLOG.md](docs/BACKLOG.md).
-
 ## Schnellstart
 
 Voraussetzungen: Node 24 (siehe `.nvmrc`), pnpm, Docker.

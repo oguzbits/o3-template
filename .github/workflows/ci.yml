@@ -16,7 +16,7 @@ concurrency:
 # Actions are pinned to commit SHAs; the tag is noted in the comment.
 # pnpm/setup reads the pnpm version from package.json (packageManager)
 # and the Node version from .nvmrc, then runs `pnpm install --frozen-lockfile`.
-# The first run needs a committed pnpm-lock.yaml (docs/BACKLOG.md).
+# require-lockfile makes the job fail when pnpm-lock.yaml is missing or out of date.
 jobs:
   quality:
     name: Typecheck, lint, architecture, dead code, duplication
