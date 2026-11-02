@@ -21,11 +21,14 @@
     "audit:duplication:details": "jscpd --reporters console",
     "audit:magic": "node scripts/audit/audit-magic-strings.mjs",
     "audit:docs": "node scripts/audit/audit-docs.mjs",
-    "test": "vitest run",
+    "test": "vitest run --project '!db'",
+    "test:db": "vitest run --project db",
     "test:watch": "vitest",
     "prepare": "husky",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down",
+    "db:generate": "pnpm --filter @o3/api exec drizzle-kit generate",
+    "db:migrate": "pnpm --filter @o3/api exec drizzle-kit migrate",
     "load": "docker run --rm -i -e BASE_URL -e RATE -e DURATION --add-host=host.docker.internal:host-gateway grafana/k6:2.3.0 run - < load/smoke.js"
   },
   "devDependencies": {

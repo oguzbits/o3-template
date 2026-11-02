@@ -18,6 +18,7 @@ sich pro Projekt unterscheidet (Datenbank, Framework, Queue), liegt hinter Ports
 | Verträge      | Zod                                              | Eine Quelle für Validierung und Typen                                              |
 | Tests         | Vitest, MSW                                      | MSW verhindert echte Netzwerkaufrufe in Tests                                      |
 | Architektur   | dependency-cruiser, knip, jscpd, Magic-String-Audit | Regeln werden geprüft, nicht nur beschrieben                                     |
+| Datenbank     | Postgres, Drizzle ORM (0.45, stabil), `pg`       | Generierte SQL-Migrationen; Drizzle 1.0 war bei der Wahl nur als `rc` verfügbar |
 | Lokale Cloud  | Floci (AWS-Emulator), Postgres                   | Kein Konto und keine Kosten; Floci ist kein vollständiger Ersatz für echtes AWS    |
 | Lasttests     | k6                                               | Skripte in `load/`, Zahlen in [LOADTEST.md](LOADTEST.md)                           |
 
@@ -27,3 +28,16 @@ sich pro Projekt unterscheidet (Datenbank, Framework, Queue), liegt hinter Ports
 - Austauschbar sind API-Framework, Datenbank und Queue. Austausch heißt: neuer Adapter, der den
   Contract-Test seines Ports besteht.
 - Neue Varianten entstehen erst, wenn ein echtes Projekt sie braucht (Rule of Three).
+
+## Datenbank
+
+- Der Postgres-Adapter (`apps/api/src/adapters/postgres`) erfüllt denselben Contract-Test wie der
+  Speicher-Adapter. `pnpm test:db` führt ihn gegen echtes Postgres aus (`pnpm db:up`, `DATABASE_URL`
+  setzen) und wendet dafür die generierten Migrationen an. `pnpm test` bleibt ohne Datenbank.
+- `DATABASE_URL` ist in `env.ts` optional. Fehlt sie, hält die API ihre Daten im Speicher (nur
+  Entwicklung); mit `NODE_ENV=production` ist sie Pflicht.
+- Schemaänderung: `schema.ts` ändern, `pnpm db:generate`, die erzeugte Migration committen. Die CI
+  schlägt fehl, wenn eine Änderung keine Migration hat. Angewendet wird mit `pnpm db:migrate`, nie
+  automatisch beim Start.
+- Drizzle ist bewusst auf die stabile Linie 0.45 gesetzt. Wechsel auf 1.0 erst, wenn es als `latest`
+  erscheint; die Migrationsordner der beiden Linien sind verschieden aufgebaut.

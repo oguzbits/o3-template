@@ -6,12 +6,24 @@ interface Closable {
 
 const SIGNALS = ['SIGTERM', 'SIGINT'] as const;
 
-/** Stops accepting connections on SIGTERM or SIGINT and exits once open requests have finished. */
-export function registerShutdown(server: Closable, log: Logger): void {
+/**
+ * Stops accepting connections on SIGTERM or SIGINT, waits for open requests, then runs `onClosed`
+ * (release pools and the like) and exits. Any failure exits with code 1.
+ */
+export function registerShutdown(
+  server: Closable,
+  log: Logger,
+  onClosed: () => Promise<unknown> = () => Promise.resolve()
+): void {
   for (const signal of SIGNALS) {
     process.once(signal, () => {
       log.info('shutdown', { signal });
-      server.close((error) => process.exit(error === undefined ? 0 : 1));
+      server.close((error) => {
+        onClosed().then(
+          () => process.exit(error === undefined ? 0 : 1),
+          () => process.exit(1)
+        );
+      });
     });
   }
 }
