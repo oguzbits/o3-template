@@ -28,5 +28,4 @@ sich pro Projekt unterscheidet (Datenbank, Framework, Queue), liegt hinter Ports
 - Neue Varianten entstehen erst, wenn ein echtes Projekt sie braucht (Rule of Three).
 - Bewusst nicht im Kern: Datenbank, Beispiel-Feature und lokale Dienste (docker-compose). Ein neues
   Projekt kann SQL oder NoSQL wählen; der Port und sein Contract-Test entstehen mit dem ersten
-  Adapter. Ein fertiger Postgres-Adapter mit Drizzle liegt als Referenz im Branch
-  `feat/postgres-adapter`.
+  Adapter. Ein fertiger Postgres-Adapter mit Drizzle liegt als Referenz im geschlossenen Pull Request #2.

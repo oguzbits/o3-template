@@ -16,22 +16,14 @@ Vorlage für eigene Szenarien (Kauf-Endpunkt, Queue, Rate Limiter).
 
 ## Ergebnisse
 
-| Szenario | Last (req/s) | erreicht (req/s) | verworfen | p95 (ms) | Fehlerrate | Maschine | Commit  |
-| -------- | ------------ | ---------------- | --------- | -------- | ---------- | -------- | ------- |
-| smoke    | 500          | 500.0            | 0         | 1.04     | 0 %        | A        | f02ccc4 |
-| smoke    | 2000         | 1995.2           | 139       | 0.53     | 0 %        | A        | f02ccc4 |
-| smoke    | 5000         | 4980.1           | 603       | 0.66     | 0 %        | A        | f02ccc4 |
-| smoke    | 10000        | 9938.2           | 1833      | 0.88     | 0 %        | A        | f02ccc4 |
+Das Template liefert keine Zahlen mit: Sie hingen an einer Maschine und an einem Dienst, den ein neues
+Projekt nicht hat. Jedes Projekt trägt hier seine eigenen Messungen ein, mit der Maschine
+(Prozessor, Kerne, Arbeitsspeicher, Betriebssystem, Node-Version), auf der gemessen wurde, und dem
+Commit. `GET /health` taugt nur als Probe, dass das Gerüst läuft; ein Kapazitätsnachweis ist es nicht,
+weil es weder Datenbank noch Queue berührt.
 
-Jede Zeile: 30 s, `GET /health`, gebauter Stand (`pnpm build`, `node apps/api/dist/index.js`), Anfrage-Log
-nach stdout (Datei). "Verworfen" sind Iterationen, die k6 nicht rechtzeitig starten konnte (Ursache nicht
-untersucht; k6 legt zusätzliche virtuelle Nutzer erst bei Bedarf an). Das Skript ist der Test des
-Gerüsts, kein Kapazitätsnachweis: `/health` berührt weder Datenbank noch Queue.
-
-Maschine A: Apple M4 (10 Kerne), 16 GiB, macOS 27.0.1, Node 26.12.0, Docker Desktop 29.8.2. API und k6
-(Container, `grafana/k6:2.3.0`) laufen auf demselben Rechner und teilen sich die Kerne; der Weg vom
-Container zum Host läuft durch das Netz von Docker Desktop. Auf Linux-CI-Runnern sind andere Zahlen zu
-erwarten.
+| Szenario | Last (req/s) | erreicht (req/s) | verworfen | p95 (ms) | Fehlerrate | Maschine | Commit |
+| -------- | ------------ | ---------------- | --------- | -------- | ---------- | -------- | ------ |
 
 ## Ausfälle provozieren
 
