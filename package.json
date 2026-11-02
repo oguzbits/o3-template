@@ -5,7 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@12.6.0",
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
   "scripts": {
     "dev": "pnpm --filter @o3/api dev",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.19.0",
+    "@types/node": "^26.6.6",
     "dependency-cruiser": "^18.4.0",
     "eslint": "^10.11.0",
     "eslint-plugin-simple-import-sort": "^14.0.0",

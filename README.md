@@ -6,7 +6,7 @@ Datenbank und kein Beispiel-Feature mit. Jedes neue Projekt startet auf demselbe
 
 ## Schnellstart
 
-Voraussetzungen: Node 24 (siehe `.nvmrc`), pnpm; Docker nur für den Lasttest.
+Voraussetzungen: Node 26 (siehe `.nvmrc`), pnpm; Docker nur für den Lasttest.
 
 ```bash
 pnpm install
