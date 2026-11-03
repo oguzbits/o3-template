@@ -61,3 +61,5 @@ Project context and the reasons for the stack: [docs/PLAN.md](docs/PLAN.md). Use
 
 - `pnpm check` and `pnpm test` must pass before you finish. The Stop hook and the Husky hooks run them.
 - Prefer small commits. Never skip hooks (`--no-verify`) and never force-push; the guard blocks both.
+- Work directly on `main`: no pull requests. The ruleset only blocks deleting `main` and force-pushes; the CI
+  checks run after the push, so check the run and fix a red one at once.

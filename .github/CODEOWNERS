@@ -1,4 +1,4 @@
-# Template-owned paths: a change here needs a code-owner review (see .github/ruleset-main.json).
+# Template-owned paths: the list that README.md uses to pull template updates.
 # Replace @oguzbits with the owner of the project.
 /.github/ @oguzbits
 /.husky/ @oguzbits

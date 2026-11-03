@@ -57,8 +57,8 @@ force-pushes, `--no-verify` and access to `.env` files. The Stop hook lets an ag
 2. Replace the owner in `.github/CODEOWNERS`.
 3. Apply the branch rules once, from inside the clone:
    `gh api -X POST repos/{owner}/{repo}/rulesets --input .github/ruleset-main.json`.
-   They require a pull request, the CI checks and, for the template-owned paths, a code-owner review.
-   Repository admins can bypass them through a pull request.
+   They only block deleting `main` and force-pushes. Work happens directly on `main`; the CI checks
+   run after the push.
 4. In the repository settings, enable private vulnerability reporting and Dependabot security updates.
    No file can switch these on.
 
