@@ -51,6 +51,31 @@ The rules are in [AGENTS.md](AGENTS.md); `CLAUDE.md` only points to it. The hook
 force-pushes, `--no-verify` and access to `.env` files. The Stop hook lets an agent finish only when
 `pnpm check` passes.
 
+## Starting a project from the template
+
+1. Create the repository with **Use this template**.
+2. Replace the owner in `.github/CODEOWNERS`.
+3. Apply the branch rules once, from inside the clone:
+   `gh api -X POST repos/{owner}/{repo}/rulesets --input .github/ruleset-main.json`.
+   They require a pull request, the CI checks and, for the template-owned paths, a code-owner review.
+   Repository admins can bypass them through a pull request.
+4. In the repository settings, enable private vulnerability reporting and Dependabot security updates.
+   No file can switch these on.
+
+## Pulling later template changes
+
+The template-owned paths are listed in `.github/CODEOWNERS`. Pull changes to them like this:
+
+```bash
+git remote add template <template-url>
+git fetch template
+git diff HEAD template/main -- .github .husky .claude config scripts AGENTS.md CLAUDE.md eslint.config.mjs tsconfig.base.json pnpm-workspace.yaml vitest.config.ts vitest.setup.ts
+git checkout template/main -- <the paths you accept>
+```
+
+Read every hunk first: the project may have changed these files on purpose. A file that the template
+deleted stays until you remove it.
+
 ## Maintenance
 
 Open work, planned building blocks and possible presets (Web, NestJS, DynamoDB) are in
