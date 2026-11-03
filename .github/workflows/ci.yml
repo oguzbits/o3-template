@@ -11,7 +11,8 @@ permissions:
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  # Never cancel a run on main: every commit there keeps its own result.
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 # Actions are pinned to commit SHAs; the tag is noted in the comment.
 # pnpm/setup reads the pnpm version from package.json (packageManager)

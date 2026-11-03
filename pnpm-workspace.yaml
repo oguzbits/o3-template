@@ -5,5 +5,8 @@ allowBuilds:
   esbuild: false
   msw: false
 # Strict: fail instead of falling back to a release younger than one day (value in minutes).
+# A security fix that is younger goes into minimumReleaseAgeExclude by name.
 minimumReleaseAge: 1440
 minimumReleaseAgeStrict: true
+# Fail when a package loses trust evidence (e.g. provenance) compared to its earlier releases.
+trustPolicy: no-downgrade

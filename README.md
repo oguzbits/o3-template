@@ -43,7 +43,7 @@ Their rules are in [AGENTS.md](AGENTS.md) and are enforced by `pnpm depcruise`.
 | Documentation | `pnpm audit:docs`        | Links, script names and paths in Markdown                     |
 
 `pnpm check` runs everything. Husky runs it before every commit and the tests before every push. CI
-adds Semgrep, Trivy with SBOM and `pnpm audit`.
+adds Semgrep, Trivy with SBOM, `pnpm audit` and zizmor (workflow audit).
 
 ## Working with coding agents
 
