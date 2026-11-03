@@ -1,0 +1,14 @@
+# Template-owned paths: a change here needs a code-owner review (see .github/ruleset-main.json).
+# Replace @oguzbits with the owner of the project.
+/.github/ @oguzbits
+/.husky/ @oguzbits
+/.claude/ @oguzbits
+/config/ @oguzbits
+/scripts/ @oguzbits
+/AGENTS.md @oguzbits
+/CLAUDE.md @oguzbits
+/eslint.config.mjs @oguzbits
+/tsconfig.base.json @oguzbits
+/pnpm-workspace.yaml @oguzbits
+/vitest.config.ts @oguzbits
+/vitest.setup.ts @oguzbits
