@@ -30,20 +30,20 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.6",
-    "dependency-cruiser": "^18.4.0",
+    "dependency-cruiser": "^18.7.2",
     "eslint": "^10.11.0",
     "eslint-plugin-simple-import-sort": "^14.0.0",
     "eslint-plugin-unused-imports": "^4.4.1",
     "globals": "^17.12.0",
     "husky": "^9.1.7",
-    "jscpd": "^5.3.3",
-    "knip": "^6.38.0",
+    "jscpd": "^5.4.3",
+    "knip": "^6.44.2",
     "lint-staged": "^17.6.0",
-    "msw": "^3.0.3",
+    "msw": "^3.0.4",
     "prettier": "^3.9.9",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.0",
-    "vitest": "^5.0.2"
+    "vitest": "^5.1.0"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx}": [
